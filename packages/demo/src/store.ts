@@ -10,6 +10,7 @@ export const AVAILABLE_TRANSPORTS: ReadonlyArray<{
 	{ value: "epoxy", label: "Epoxy" },
 ];
 const DEFAULT_WISP_URL = import.meta.env.VITE_WISP_URL;
+console.log("WISP URL:", DEFAULT_WISP_URL);
 const DEFAULT_TRANSPORT: AvailableTransports = "libcurl";
 const DEFAULT_HOME_URL = "https://google.com";
 const DEFAULT_MAX_REQUESTS = 200;

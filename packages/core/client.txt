@@ -389,9 +389,9 @@ export class ScramjetClient {
 
 				const curclient = currentWin[SCRAMJETCLIENT];
 				const frame = curclient.descriptors.get(
-        "window.frameElement",
-        currentWin
-) as HTMLIFrameElement | null;
+					"window.frameElement",
+					currentWin
+				);
 				if (!frame) {
 					// we're inside an iframe, but the top frame is scramjet-controlled and top level, so we can't get a top frame name
 					// or we're cross-origin and frameElement doesn't exist. that's a TODO because this won't work
@@ -427,10 +427,10 @@ export class ScramjetClient {
 					if (parentWin[SCRAMJETCLIENT]) {
 						// we're inside an iframe, and the parent is scramjet-controlled
 						const parentClient = parentWin[SCRAMJETCLIENT];
-					const frame = parentClient.descriptors.get(
-        "window.frameElement",
-        parentWin
-) as HTMLIFrameElement | null;
+						const frame = parentClient.descriptors.get(
+							"window.frameElement",
+							parentWin
+						);
 
 						if (!frame) {
 							// parent is scramjet controlled and top-level. there is no parent frame name
@@ -451,10 +451,9 @@ export class ScramjetClient {
 						// we're inside an iframe, and the parent is not scramjet-controlled
 						// return our own frame name
 						const frame = client.descriptors.get(
-        "window.frameElement",
-        client.global
-) as HTMLIFrameElement | null;
-						
+							"window.frameElement",
+							client.global
+						);
 						if (!frame.name) {
 							// the parent frame is not scramjet-controlled, so we can't get a parent frame name
 							dbg.error(

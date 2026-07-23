@@ -52,7 +52,7 @@ async function init() {
 	interstitial.showModal();
 
 	try {
-		const registration = await navigator.serviceWorker.register("./sw.js");
+		const registration = await navigator.serviceWorker.register("/sw.js");
 
 		// Non-blocking progress updates on state transitions.
 		const updateStatus = (sw: ServiceWorker | null) => {

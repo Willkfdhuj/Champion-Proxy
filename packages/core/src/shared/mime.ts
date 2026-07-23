@@ -56,7 +56,6 @@ export function parseMimeType(input: string): ParsedMimeType | null {
 function asParsed(mime: string | ParsedMimeType): ParsedMimeType | null {
 	return typeof mime === "string" ? parseMimeType(mime) : mime;
 }
-
 const FONT_ESSENCES = new _Set([
 	"application/font-cff",
 	"application/font-otf",
@@ -65,13 +64,13 @@ const FONT_ESSENCES = new _Set([
 	"application/font-woff",
 	"application/vnd.ms-fontobject",
 	"application/vnd.ms-opentype",
-]);
+]) as unknown as _Set<string>;
 
 const ARCHIVE_ESSENCES = new _Set([
 	"application/x-rar-compressed",
 	"application/zip",
 	"application/x-gzip",
-]);
+]) as unknown as _Set<string>;
 
 const JAVASCRIPT_ESSENCES = new _Set([
 	"application/ecmascript",
@@ -90,8 +89,7 @@ const JAVASCRIPT_ESSENCES = new _Set([
 	"text/livescript",
 	"text/x-ecmascript",
 	"text/x-javascript",
-]);
-
+]) as unknown as _Set<string>;
 /** A MIME type whose type is "image". */
 export function isImageMimeType(mime: string | ParsedMimeType): boolean {
 	const p = asParsed(mime);

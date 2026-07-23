@@ -27,6 +27,12 @@ export type QueryParamKey = keyof typeof QP;
 
 export type QueryParams = Partial<Record<QueryParamKey, string>>;
 
+export type ScramjetRequestMode =
+	| "cors"
+	| "no-cors"
+	| "same-origin"
+	| "navigate";
+
 const QP_INVERSE: Record<string, QueryParamKey> = (() => {
 	const inv: Record<string, QueryParamKey> = {};
 	for (const key of Object_keys(QP) as QueryParamKey[]) {
@@ -41,8 +47,10 @@ export function parseQueryParams(searchParams: URLSearchParams): {
 } {
 	const params: QueryParams = {};
 	const extras: Record<string, string> = {};
+
 	for (const [key, value] of [...searchParams.entries()]) {
 		const logical = QP_INVERSE[key];
+
 		if (logical) {
 			params[logical] = value;
 		} else {
@@ -52,6 +60,7 @@ export function parseQueryParams(searchParams: URLSearchParams): {
 			extras[key] = value;
 		}
 	}
+
 	return { params, extras };
 }
 
@@ -61,6 +70,7 @@ export function parseRequest(
 ): ScramjetFetchParsed {
 	const strippedUrl = new _URL(request.rawUrl.href);
 	const { params, extras } = parseQueryParams(request.rawUrl.searchParams);
+
 	strippedUrl.search = "";
 
 	const hadExtraParams = Object_keys(extras).length > 0;
@@ -68,10 +78,10 @@ export function parseRequest(
 	if (!_URL.canParse(unrewriteUrl(strippedUrl, handler.context))) {
 		throw new Error(`unable to parse rewritten url: ${strippedUrl.href}`);
 	}
+
 	const url = new _URL(unrewriteUrl(strippedUrl, handler.context));
 
 	if (url.origin === new _URL(request.rawUrl).origin) {
-		// uh oh!
 		throw new Error(
 			"attempted to fetch from same origin - this means the site has obtained a reference to the real origin, aborting"
 		);
@@ -82,9 +92,12 @@ export function parseRequest(
 	}
 
 	const clientId = request.clientId;
+
 	let trackedClient: ScramjetFetchTrackedClient | undefined;
+
 	if (clientId) {
 		trackedClient = handler.trackedClients.get(clientId);
+
 		if (!trackedClient) {
 			trackedClient = new ScramjetFetchTrackedClient(clientId);
 			handler.trackedClients.set(clientId, trackedClient);
@@ -105,11 +118,11 @@ export function parseRequest(
 			? params.fetchSite
 			: undefined;
 
-	const fetchMode = ["cors", "no-cors", "same-origin", "navigate"].includes(
-		params.mode
-	)
-		? params.mode
-		: undefined;
+	const fetchMode: ScramjetRequestMode | undefined =
+		["cors", "no-cors", "same-origin", "navigate"].includes(params.mode)
+			? (params.mode as ScramjetRequestMode)
+			: undefined;
+
 	const destination =
 		(params.destination as RequestDestination | undefined) ||
 		request.rawDestination;
@@ -133,7 +146,6 @@ export function parseRequest(
 		crossSiteRedirect: params.crossSiteRedirect === "1",
 		fetchSiteState,
 		fetchInitiatorOrigin: params.initiatorOrigin || undefined,
-		// TODO: should really just be a boolean
 		fetchCredentialsInclude: params.credentials === "include",
 		fetchMode,
 		destination,

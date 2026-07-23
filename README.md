@@ -55,4 +55,4 @@ You can run the Scramjet dev server when running this command at the root
 pnpm dev
 ```
 
-The demo page for scramjet should now be running at <http://localhost:4141> and should rebuild upon a file being changed (excluding the rewriter).
+The demo page for scramjet should now be running at <http://localhost:4141> and should rebuild upon a file being changed (excluding the rewriter). THANK YOU SCRAMJET!
